@@ -29,7 +29,7 @@ ZMALoader.setOnLoad(function (mapOptions, error) {
             method: 'GET',
             headers: {
                 'x-api-key': 'O8iPysCxWSagAdi6h70ub7I3DreHA5Qi7EEyUorM',
-                'Authorization': 'ip'
+                'Authorization': 'referer'
             }
         })
             .then(response => response.json())
