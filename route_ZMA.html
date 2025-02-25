@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZENRIN Route + Google Street View</title>
+
+    <!-- ZENRIN Maps API -->
+    <script
+        src="https://test-js.zmaps-api.com/zma_loader.js?key=O8iPysCxWSagAdi6h70ub7I3DreHA5Qi7EEyUorM&auth=referer"></script>
+
+    <!-- Google Maps API -->
+    <script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAAFVzfnoa0ok5ocEhDuGOKV_CbTF9mvJQ&libraries=geometry,places&callback=initGoogleMaps"
+        defer></script>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+
+        #ZMap {
+            width: 70%;
+            height: 100vh;
+        }
+
+        #street-view {
+            width: 30%;
+            height: 100vh;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="ZMap"></div>
+    <div id="street-view"></div>
+    <script src="route_ZMA.js" type="text/javascript"></script>
+</body>
+
+</html>

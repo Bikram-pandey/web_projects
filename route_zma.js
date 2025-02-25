@@ -1,31 +1,37 @@
-const start = { lat: 35.681406, lng: 139.767132 }; // 東京駅
-const waypoint1 = { lat: 35.658034, lng: 139.701636 }; // 渋谷
-const waypoint2 = { lat: 35.6893, lng: 139.7054 }; //  新宿高等学校
-const destination = { lat: 35.6895, lng: 139.6917 }; // 東京都庁舎
+let map, streetView;
 
+// Initialize ZMap API
 ZMALoader.setOnLoad(function (mapOptions, error) {
     if (error) return console.error(error);
 
-    mapOptions.center = new ZDC.LatLng(35.681406, 139.767132); // 中心点の緯度経度（東京駅）
-    mapOptions.mouseWheelReverseZoom = true;  //★マウスホイールのズーム方向の反転を指定
-    mapOptions.zoom = 14;
+    mapOptions.center = new ZDC.LatLng(35.6672, 139.9856);
+    mapOptions.mouseWheelReverseZoom = true;
+    mapOptions.zoom = 12;
 
     map = new ZDC.Map(document.getElementById('ZMap'), mapOptions, function () {
-        // コントロールを追加
+        const start = new ZDC.LatLng(35.6329, 139.8804); // Tokyo Disneyland
+        const destination = new ZDC.LatLng(35.7014, 140.0908); // Yachiyodai Station
+
+        // Add controls
         map.addControl(new ZDC.ZoomButton('top-left'));
         map.addControl(new ZDC.ScaleBar('bottom-left'));
 
-        // Add markers for start, waypoint, and destination
-        map.addWidget(new ZDC.Marker(new ZDC.LatLng(start.lat, start.lng), { styleId: ZDC.MARKER_COLOR_ID_BLUE_L }));
-        map.addWidget(new ZDC.Marker(new ZDC.LatLng(destination.lat, destination.lng), { styleId: ZDC.MARKER_COLOR_ID_RED_L }));
-        map.addWidget(new ZDC.Marker(new ZDC.LatLng(waypoint1.lat, waypoint1.lng), { styleId: ZDC.MARKER_COLOR_ID_GREEN_L }));
-        map.addWidget(new ZDC.Marker(new ZDC.LatLng(waypoint2.lat, waypoint2.lng), { styleId: ZDC.MARKER_COLOR_ID_YELLOW_L })); // New waypoint
+        // Add markers
+        const startMarker = new ZDC.Marker(start, { styleId: ZDC.MARKER_COLOR_ID_BLUE_L });
+        const endMarker = new ZDC.Marker(destination, { styleId: ZDC.MARKER_COLOR_ID_RED_L });
+        map.addWidget(startMarker);
+        map.addWidget(endMarker);
 
-        // ウェイポイントを API リクエストの 1 つのパラメータに結合します
-        const waypoints = `${waypoint1.lng},${waypoint1.lat},${waypoint2.lng},${waypoint2.lat}`;
+        map.addEventListener("click", function (event) {
 
-        // Fetch optimal route with multiple waypoints
-        fetch(`https://test-web.zmaps-api.com/route/route_mbn/drive_tsp?search_type=1&from=${start.lng},${start.lat}&to=${destination.lng},${destination.lat}&waypoint=${waypoints}`, {
+            const latlon = event.latlng;
+            console.log(latlon);
+            initGoogleMaps(latlon);
+
+        });
+
+        // Fetch route from ZMap API
+        fetch(`https://test-web.zmaps-api.com/route/route_mbn/drive_ptp?search_type=1&from=${start.lng},${start.lat}&to=${destination.lng},${destination.lat}&regulation_type=121200&toll_type=large`, {
             method: 'GET',
             headers: {
                 'x-api-key': 'O8iPysCxWSagAdi6h70ub7I3DreHA5Qi7EEyUorM',
@@ -51,3 +57,16 @@ ZMALoader.setOnLoad(function (mapOptions, error) {
         console.error('Failed to generate the map.');
     });
 });
+
+// Initialize Google Street View
+async function initGoogleMaps(latlon) {
+    const default_Origin = { lat: 35.6329, lng: 139.8804 }; // Start point
+    const is_latlon = latlon || default_Origin; // Use latlon if available, otherwise use default_Origin
+
+    streetView = new google.maps.StreetViewPanorama(document.getElementById("street-view"), {
+        position: is_latlon,
+        pov: { heading: 34, pitch: 10 },
+        zoom: 1
+    });
+}
+
