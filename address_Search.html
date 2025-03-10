@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+    <title>住所入力フォーム</title>
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Fullscreen map */
+        #ZMap {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+
+        /* Fixed address input box */
+        #addressContainer {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 4px;
+            border-radius: 8px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+            width: 280px;
+            z-index: 1000;
+        }
+
+        /* Allow interactions in input fields */
+        .input-group {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            padding: 3px;
+        }
+
+        .input-group i {
+            padding: 2px;
+            color: #007bff;
+            /* Blue */
+        }
+
+        .input-group input {
+            flex: 1;
+            border: none;
+            outline: none;
+            background: transparent;
+            padding: 6px;
+            font-size: 14px;
+        }
+
+        label {
+            font-weight: bold;
+            color: #333;
+            display: block;
+            margin-top: 5px;
+        }
+
+        /* Hidden address fields initially */
+        #addressDetails {
+            display: none;
+            margin-top: 15px;
+        }
+
+        #addressDetails .input-group {
+            margin-bottom: 8px;
+        }
+
+        #addressDetails h3 {
+            margin-bottom: 10px;
+            color: #333;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="addressContainer">
+        <h2>住所入力フォーム</h2>
+
+        <label>住所検索:</label>
+        <div class="input-group">
+            <i class="fas fa-search"></i>
+            <input type="text" id="ADDRESS_INPUT" placeholder="例: 千葉県八千代市八千代北" autocomplete="on">
+        </div>
+
+        <button id="submitBtn">住所を確認</button>
+
+        <!-- Hidden address details box -->
+        <div id="addressDetails">
+            <h3>住所詳細</h3>
+
+            <label>郵便番号:</label>
+            <div class="input-group">
+                <i class="fas fa-envelope"></i>
+                <input type="text" id="POSTAL_CODE" readonly>
+            </div>
+
+            <label>都道府県:</label>
+            <div class="input-group">
+                <i class="fas fa-map-marker-alt"></i>
+                <input type="text" id="PREFECTURE" readonly>
+            </div>
+
+            <label>市区町村:</label>
+            <div class="input-group">
+                <i class="fas fa-city"></i>
+                <input type="text" id="CITY" readonly>
+            </div>
+
+            <label>町名:</label>
+            <div class="input-group">
+                <i class="fas fa-home"></i>
+                <input type="text" id="TOWN" readonly>
+            </div>
+
+            <label>経緯度:</label>
+            <div class="input-group">
+                <i class="fas fa-map-pin"></i>
+                <input type="text" id="LATLON" readonly>
+            </div>
+
+            <div id="BUILDING_NAME_DISPLAY"></div>
+        </div>
+    </div>
+
+    <div id="ZMap"></div>
+
+    <script
+        src="https://test-js.zmaps-api.com/zma_loader.js?key=O8iPysCxWSagAdi6h70ub7I3DreHA5Qi7EEyUorM&auth=referer"></script>
+    <script src="address_Search.js"></script>
+</body>
+
+</html>
